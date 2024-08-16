@@ -1,9 +1,14 @@
 
 import { Container, Profile, Logo} from "./styles";
 import { Input } from "../Input";
-
+import { useAuth } from '../../hooks/auth';
+import { Link } from "react-router-dom";
+import { api } from '../../services/api';
+import avatarPlaceholder from '../../assets/avatar_placeholder.svg'
 
 export function Header(){
+    const { signOut, user } = useAuth();
+    const avatarUrl = user.avatar ? `${api.defaults.baseURL}/files/${user.avatar}`: avatarPlaceholder;
     return (
         <Container>
             <Logo>
@@ -12,15 +17,17 @@ export function Header(){
 
             <Input placeholder="Pesquilar pelo título" />
 
-            <Profile to="/profile">
+            <Profile >
                 <div>
-                    <strong>Ivan Rordrigues</strong>
-                    <span>Sair</span>
+                    <strong>{user.name}</strong>
+                    <span onClick={signOut}>Sair</span>
 
                 </div>
-                <img src="https://github.com/ivanrods.png" 
-                alt="Foto do usuário" 
-                />
+                <Link to="/Profile">
+                    <img src={avatarUrl}
+                    alt={user.name}/>
+                </Link>
+                
                 
             </Profile>
             
